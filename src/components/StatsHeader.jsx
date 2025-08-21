@@ -109,7 +109,7 @@ export function StatsHeader({ filter = 'celebrity' }) {
 
   return (
     <Grid container spacing={2} alignItems="stretch">
-      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex', width: '100%' }}>
+      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex' }}>
         <StatCard
           title="Avg Decline (24h, vol‑weighted)"
           image={biggestLoser?.image}
@@ -117,7 +117,7 @@ export function StatsHeader({ filter = 'celebrity' }) {
           secondary={`Biggest: ${biggestLoser?.name ?? '—'} ${formatPercent(biggestLoser?.price_change_percentage_24h)}`}
         />
       </Grid>
-      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex', width: '100%' }}>
+      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex' }}>
         <StatCard
           title="Total Market Cap"
           image={lowestVolume?.image}
@@ -125,7 +125,7 @@ export function StatsHeader({ filter = 'celebrity' }) {
           secondary={`Across ${data.length} tokens`}
         />
       </Grid>
-      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex', width: '100%' }}>
+      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex' }}>
         <StatCard
           title="Total Loss From ATH (est.)"
           image={riskiest?.image}

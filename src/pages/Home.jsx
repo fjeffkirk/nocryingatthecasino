@@ -4,7 +4,7 @@ import { CelebrityTable } from '../components/CelebrityTable'
 import { useState } from 'react'
 
 export default function Home() {
-  const [tab, setTab] = useState('celebrity')
+  const [tab, setTab] = useState('all')
 
   return (
     <Container maxWidth={false} sx={{ py: 0, px: { xs: 1, sm: 3, md: 4 } }}>
