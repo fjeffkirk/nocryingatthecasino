@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Avatar, Stack, Typography, TableContainer, TableSortLabel } from '@mui/material'
+import { Paper, Table, TableBody, TableCell, TableHead, TableRow, Avatar, Stack, Typography, TableContainer, TableSortLabel, Chip, Tooltip } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { fetchMarketsByIds, fetchMarketsByCategory, fetchMarketsByCategories } from '../api/coingecko'
 import { CELEBRITY_TOKEN_IDS } from '../data/celebrityTokens'
@@ -74,7 +74,7 @@ export function CelebrityTable({ filter = 'celebrity' }) {
   }
 
   return (
-    <TableContainer component={Paper} variant="outlined" sx={{ bgcolor: 'background.paper' }}>
+    <TableContainer component={Paper} variant="outlined" sx={{ bgcolor: 'background.paper', width: '100%', overflowX: 'auto' }}>
       <Table size="small" aria-label="celebrity tokens table">
         <TableHead>
           <TableRow>
@@ -122,11 +122,18 @@ export function CelebrityTable({ filter = 'celebrity' }) {
             <TableRow key={row.id} hover>
               <TableCell>{idx + 1}</TableCell>
               <TableCell>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Avatar src={row.image} alt={row.name} sx={{ width: 28, height: 28 }} />
-                  <Stack direction="row" spacing={1} alignItems="baseline">
-                    <Typography fontWeight={600}>{row.name}</Typography>
-                    <Typography variant="caption" color="text.secondary">{row.symbol?.toUpperCase()}</Typography>
+                <Stack direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Avatar src={row.image} alt={row.name} sx={{ width: 28, height: 28 }} />
+                    <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap">
+                      <Typography fontWeight={600}>{row.name}</Typography>
+                      <Typography variant="caption" color="text.secondary">{row.symbol?.toUpperCase()}</Typography>
+                      {typeof row.total_volume === 'number' && row.total_volume < 1000 ? (
+                        <Tooltip title="Less than $1,000 volume is considered a dead token">
+                          <Chip label="DEAD" size="small" color="error" variant="outlined" sx={{ height: 18, ml: 0.5 }} />
+                        </Tooltip>
+                      ) : null}
+                    </Stack>
                   </Stack>
                 </Stack>
               </TableCell>

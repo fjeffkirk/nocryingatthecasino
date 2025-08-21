@@ -14,7 +14,7 @@ function App() {
           </Typography>
         </Stack>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-          Tracking celebrity meme tokens so you don't get rugged. This is not financial advice.
+          Tracking celebrity meme tokens. This is not financial advice.
         </Typography>
       </Box>
 

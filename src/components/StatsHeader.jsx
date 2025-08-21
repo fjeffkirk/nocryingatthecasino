@@ -6,8 +6,8 @@ import { formatCurrency, formatPercent, formatNumber, formatCurrencyCompact } fr
 
 function StatCard({ title, primary, secondary, image, hint }) {
   return (
-    <Card variant="outlined" sx={{ bgcolor: 'background.paper', height: '100%', width: '100%' }}>
-      <CardContent sx={{ minHeight: 112, display: 'flex', alignItems: 'center' }}>
+    <Card variant="outlined" sx={{ bgcolor: 'background.paper', height: '100%', width: '100%', flex: 1 }}>
+      <CardContent sx={{ minHeight: 112, display: 'flex', alignItems: 'center', width: '100%' }}>
         <Stack direction="row" spacing={2} alignItems="center">
           {image ? <Avatar src={image} alt={title} /> : <Box sx={{ width: 40, height: 40 }} />}
           <Box>
@@ -74,6 +74,22 @@ export function StatsHeader({ filter = 'celebrity' }) {
 
   // New metrics
   const avgDecline24h = data.reduce((acc, c) => acc + (c.price_change_percentage_24h ?? 0), 0) / data.length
+  // Volume-weighted average decline to reduce impact of tiny-volume outliers
+  const { vwDecline24h } = (() => {
+    const valid = data.filter((c) =>
+      typeof c.price_change_percentage_24h === 'number' &&
+      typeof c.total_volume === 'number' && c.total_volume > 0
+    )
+    const volSum = valid.reduce((acc, c) => acc + c.total_volume, 0)
+    if (volSum > 0) {
+      const weighted = valid.reduce(
+        (acc, c) => acc + (c.price_change_percentage_24h * (c.total_volume / volSum)),
+        0,
+      )
+      return { vwDecline24h: weighted }
+    }
+    return { vwDecline24h: avgDecline24h }
+  })()
   const totalMarketCap = data.reduce((acc, c) => acc + (c.market_cap ?? 0), 0)
 
   // Approximate total loss from ATH: sum of (market_cap * drawdown%)
@@ -93,15 +109,15 @@ export function StatsHeader({ filter = 'celebrity' }) {
 
   return (
     <Grid container spacing={2} alignItems="stretch">
-      <Grid item xs={12} md={4} lg={4} sx={{ display: 'flex' }}>
+      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex', width: '100%' }}>
         <StatCard
-          title="Avg Decline (24h)"
+          title="Avg Decline (24h, vol‑weighted)"
           image={biggestLoser?.image}
-          primary={`${formatPercent(avgDecline24h)}`}
+          primary={`${formatPercent(vwDecline24h)}`}
           secondary={`Biggest: ${biggestLoser?.name ?? '—'} ${formatPercent(biggestLoser?.price_change_percentage_24h)}`}
         />
       </Grid>
-      <Grid item xs={12} md={4} lg={4} sx={{ display: 'flex' }}>
+      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex', width: '100%' }}>
         <StatCard
           title="Total Market Cap"
           image={lowestVolume?.image}
@@ -109,7 +125,7 @@ export function StatsHeader({ filter = 'celebrity' }) {
           secondary={`Across ${data.length} tokens`}
         />
       </Grid>
-      <Grid item xs={12} md={4} lg={4} sx={{ display: 'flex' }}>
+      <Grid item xs={12} sm={12} md={4} lg={4} sx={{ display: 'flex', width: '100%' }}>
         <StatCard
           title="Total Loss From ATH (est.)"
           image={riskiest?.image}

@@ -7,7 +7,7 @@ export default function Home() {
   const [tab, setTab] = useState('celebrity')
 
   return (
-    <Container maxWidth={false} sx={{ py: 0, px: { xs: 2, sm: 3, md: 4 } }}>
+    <Container maxWidth={false} sx={{ py: 0, px: { xs: 1, sm: 3, md: 4 } }}>
       <StatsHeader filter={tab} />
       <Box sx={{ mt: 4 }}>
         <Tabs
