@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: no-crying-at-the-casino
+    env: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: NEXT_PUBLIC_COINGECKO_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_PRIVY_APP_ID
+        sync: false
+
